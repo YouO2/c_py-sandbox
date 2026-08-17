@@ -12,7 +12,7 @@ class Candle(ctypes.Structure):
 current_dir = os.path.dirname(os.path.abspath(__file__))
 lib = ctypes.CDLL(os.path.join(current_dir, 'libohlc.so'))
 
-# Nastavenie tlmočníka
+
 lib.aggregate_ticks.argtypes = [
     ctypes.POINTER(ctypes.c_double), 
     ctypes.c_int                     
@@ -26,10 +26,10 @@ if __name__ == "__main__":
     ceny = [20.0, 51.0, -5.0, 26.0, 80.0, -40.0, 40.0]
     pocet = len(ceny)
     
-    # Preklad do C poľa
+    
     c_ceny_pole = (ctypes.c_double * pocet)(*ceny)
     
-    # Volanie C enginu
+    
     vysledok_ptr = lib.aggregate_ticks(c_ceny_pole, pocet)
     
     if vysledok_ptr:
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         print(f"Low cena:   {vysledok_ptr.contents.low}")
         print(f"Close cena: {vysledok_ptr.contents.close}")
         
-        # UPRATANIE PAMÄTE (Memory Management)
+        
         lib.free_candle_memory(vysledok_ptr)
         print("\nPamäť bola bezpečne uvoľnená.")
     else:
